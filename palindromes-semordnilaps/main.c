@@ -55,6 +55,8 @@ int is_pal(char *word, char **words)
             FILE *file = fopen("result.txt", "a");
             fprintf(file, "%s\n", word);
             fclose(file);
+
+            free(reversed);
             return 1; // Is a pal
         }
 
@@ -69,7 +71,8 @@ int is_pal(char *word, char **words)
 int main(int argc, char const *argv[])
 {
 
-    const char *input_file = argv[1];
+    // const char *input_file = argv[1];
+    const char *input_file = "words.txt";
     // Clear the result file
     FILE *file = fopen("result.txt", "w");
     fclose(file);
