@@ -45,6 +45,7 @@ int is_pal(char *word, char **words)
     {
         *(reversed + i) = *(word + len - i - 1);
     }
+
     int i = 0;
     while (i < MAX_WORDS)
     {
