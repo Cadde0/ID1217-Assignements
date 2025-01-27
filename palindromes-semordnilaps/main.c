@@ -6,8 +6,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "findPal.h"
-
 #define MAX_WORDS 235977
 
 int store_words(const char *filename, char **words)
@@ -47,14 +45,19 @@ int is_pal(char *word, char **words)
     {
         *(reversed + i) = *(word + len - i - 1);
     }
-
-    while (/*Condition*/)
+    int i = 0;
+    while (i < MAX_WORDS)
     {
-        if (/*reversed word is in dict*/)
+        if (strcmp(words[i], reversed) == 0)
         {
             /* write word to result file */
+            FILE *file = fopen("result.txt", "a");
+            fprintf(file, "%s\n", word);
+            fclose(file);
             return 1; // Is a pal
         }
+
+        i++;
     }
 
     free(reversed);
@@ -66,18 +69,32 @@ int main(int argc, char const *argv[])
 {
 
     const char *input_file = argv[1];
+    // Clear the result file
+    FILE *file = fopen("result.txt", "w");
+    fclose(file);
     // Allocate memory for the words
     char **words = malloc(MAX_WORDS * sizeof(char *));
 
     // Store the words in the array
     int word_count = store_words(input_file, words);
 
+    // Check if the words are palindromes
+    for (int i = 0; i < word_count; i++)
+    {
+        if (is_pal(words[i], words) == 1)
+        {
+            printf("%s is a palindrome\n", words[i]);
+        }
+    }
+
     // Print the words to verify
+    /*
     for (int i = 0; i < word_count; i++)
     {
         printf("%s\n", words[i]);
     }
     printf("Word count: %d\n", word_count);
+    */
 
     // Free the allocated memory
     for (int i = 0; i < MAX_WORDS; i++)
