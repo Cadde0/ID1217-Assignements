@@ -179,6 +179,10 @@ int main(int argc, char const *argv[])
         return 1;
     }
 
+    // Clear the result file
+    FILE *file = fopen("result.txt", "w");
+    fclose(file);
+
     W = atoi(argv[2]);
     words = malloc(MAX_WORDS * sizeof(char *));
     word_count = store_words(argv[1]);
