@@ -13,7 +13,7 @@ char **words;
 int word_count;
 int palindrome_count = 0;
 int semordnilap_count = 0;
-pthread_mutex_t mutex;
+// pthread_mutex_t mutex;
 int W;
 
 int store_words(const char *filename)
@@ -52,7 +52,7 @@ void *worker(void *arg)
 
     // Divide words according to thread
     int start = (word_count / W) * thread_id;
-    int end = (thread_id == W - 1) ? word_count : (word_count / W) * (thread_id + 1) - 1;
+    int end = (thread_id == W - 1) ? word_count : (word_count / W) * (thread_id + 1);
 
     printf("%d, %d, %d\n", thread_id, start, end);
     for (int i = start; i < end; i++)
@@ -92,87 +92,18 @@ void *worker(void *arg)
             }
         }
     }
-    pthread_mutex_lock(&mutex);
+    // pthread_mutex_lock(&mutex);
     palindrome_count += local_palindrome_count;
     semordnilap_count += local_semiordnilap_count;
-    pthread_mutex_unlock(&mutex);
+    // pthread_mutex_unlock(&mutex);
 
     printf("Thread %d found %d palindromes and %d semordnilaps.\n", thread_id, local_palindrome_count, local_semiordnilap_count);
 
     return NULL;
 }
 
-int is_pal(char *word, char **words)
-{
-    int len = strlen(word);
-    char *reversed = malloc(len * sizeof(char));
-    for (int i = 0; i < len; i++)
-    {
-        *(reversed + i) = *(word + len - i - 1);
-    }
-
-    int i = 0;
-    while (i < MAX_WORDS)
-    {
-        if (strcmp(words[i], reversed) == 0)
-        {
-            /* write word to result file */
-            FILE *file = fopen("result.txt", "a");
-            fprintf(file, "%s\n", word);
-            fclose(file);
-
-            free(reversed);
-            return 1; // Is a pal
-        }
-
-        i++;
-    }
-
-    free(reversed);
-
-    return 0;
-}
-
 int main(int argc, char const *argv[])
 {
-
-    //// const char *input_file = argv[1];
-    // const char *input_file = "words.txt";
-    //// Clear the result file
-    // FILE *file = fopen("result.txt", "w");
-    // fclose(file);
-    //// Allocate memory for the words
-    // char **words = malloc(MAX_WORDS * sizeof(char *));
-    //
-    //// Store the words in the array
-    // int word_count = store_words(input_file, words);
-    //
-    //// Check if the words are palindromes
-    // for (int i = 0; i < word_count; i++)
-    //{
-    //     if (is_pal(words[i], words) == 1)
-    //     {
-    //         printf("%s is a palindrome\n", words[i]);
-    //     }
-    // }
-    //
-    //// Print the words to verify
-    ///*
-    // for (int i = 0; i < word_count; i++)
-    //{
-    //     printf("%s\n", words[i]);
-    // }
-    // printf("Word count: %d\n", word_count);
-    //*/
-    //
-    //// Free the allocated memory
-    // for (int i = 0; i < MAX_WORDS; i++)
-    //{
-    //     free(words[i]);
-    // }
-    // free(words);
-    // return 0;
-
     if (argc != 3)
     {
         printf("Usage: %s <dictionary_file> <num_threads>\n", argv[0]);
@@ -188,7 +119,7 @@ int main(int argc, char const *argv[])
     word_count = store_words(argv[1]);
     pthread_t threads[W];
     int thread_ids[W];
-    pthread_mutex_init(&mutex, NULL);
+    // pthread_mutex_init(&mutex, NULL);
 
     struct timeval start, end;
     gettimeofday(&start, NULL);
@@ -211,7 +142,7 @@ int main(int argc, char const *argv[])
     printf("Total semordnilaps: %d\n", semordnilap_count);
     printf("Execution time: %f seconds\n", elapsed_time);
 
-    pthread_mutex_destroy(&mutex);
+    // pthread_mutex_destroy(&mutex);
     for (int i = 0; i < word_count; i++)
     {
         free(words[i]);
