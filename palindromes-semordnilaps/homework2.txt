@@ -1,0 +1,26 @@
+
+Run the program on different numbers of processors and report the speedup (sequential execution time divided by parallel execution time) for different numbers of processors (up to at least 4) and different workloads (at least 3 different sizes of a dictionary). Run each program several times (at least 5) and use the median value for execution time. Try to provide reasonable explanations for your results. Measure only the parallel part of your program. Specify the number of processors used by specifying a different number of threads (set the OMP_NUM_THREADS environment variable or use a call to omp_set_num_threads(), see the OpenMP specification).
+
+Report: Parallel Palindrome and Semordnilap Finder OpenMP
+
+This program is designed to find palindromes and semordnilaps in a given dictionary file using parallel processing with OpenMP. A palindrome is a word that reads the same backward as forward, while a semordnilap is a word that forms another valid word when reversed. So to our solution starts with reversing the word and then checking if it is the same as the original word, it is then a palindrome, if it is not a palindrome, we compare the reversed word to the words of the dictionary and if we find a word that is the same, then it is a semordnilap. The program parallelises this by dividing the words equally amongst threads to run in parallel.
+
+Benchmarks:
+
+Small Dictionary (25,143 words)
+    - Sequential runtime: 1.5 seconds
+    - 2 threads: 0.8 seconds (speedup: 1.9)
+    - 3 threads: 0.55 seconds (speedup: 2.7)
+    - 4 threads: 0.43 seconds (speedup: 3.5)
+    - 8 threads: 0.34 seconds (speedup: 4.4)
+Large Dictionary (235,977 words)
+    - Sequential runtime: 135 seconds
+    - 2 threads: 75 seconds (speedup: 1.8)
+    - 3 threads: 56 seconds (speedup: 2.4)
+    - 4 threads: 48 seconds (speedup: 2.8)
+    - 8 threads: 31 seconds (speedup: 4.3)
+
+Conclusion:
+
+The benchmarks show that the parallel palindrome and semordnilap finder program attains substantial speedup when using more threads especially when processing larger dictionaries. The system does not achieve absolute linear speedup because thread synchronization requires additional management costs yet it performs efficiently with growing workloads.
+

@@ -1,13 +1,22 @@
-Suppose there is only one bathroom in your department. Any number of men or women can use it, but not simultaneously.
+The solution simulates a unisex bathroom where any number of men or women can use it, but not simultaneously. It uses threads to represent men and women and semaphores for synchronization to ensure mutual exclusion and fairness. Threads represent men and women trying to use the bathroom. They sleep for a random time to simulate working and then use the bathroom.
 
-Develop and implement a multithreaded program that provides a fair solution to this problem using only semaphores for synchronization. 
+The Queue manages the order of people waiting to use the bathroom.
 
-Represent men and women as threads that repeatedly work (sleep for a random amount of time) and use the bathroom.
+We use two Semaphores to ensure mutual exclusion and avoid race conditions:
+    1. bathroom_lock: Controls access to the bathroom.
+    
+    2. queue_lock: Ensures mutual exclusion when accessing the queue.
 
-Your program should allow any number of men or women to be in the bathroom simultaneously.
+Global Variables:
+    count: Tracks the number of people in the bathroom.
+    current_gender: Tracks the gender currently using the bathroom.
 
-Your solution should ensure the required exclusion, avoid deadlock, and ensure fairness, i.e., ensure that any person (man or woman) waiting to enter the bathroom eventually gets to do so.
+Semaphore Usage
+    queue_lock: Ensures that only one thread can modify the queue at a time, preventing race conditions.
 
-Have the persons sleep for a random amount of time between visits to the bathroom and have them sleep for a smaller random amount of time to simulate the time it takes to be in the bathroom.
+    bathroom_lock: Ensures that only one thread can modify the count and current_gender variables at a time, maintaining mutual exclusion.
 
-Your program should print a trace of interesting simulation events.
+Ensuring Fairness and Avoiding Deadlocks
+    Fairness: The queue ensures that people are served in the order they arrive. The queue_lock semaphore ensures mutual exclusion when accessing the queue.
+
+    Deadlock Avoidance: The use of semaphores ensures synchronization. The bathroom_lock semaphore ensures that only one person can modify shared variables at a time, preventing deadlocks.
