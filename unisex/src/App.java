@@ -1,19 +1,21 @@
+import java.util.LinkedList;
+import java.util.Queue;
+
 public class App {
-    private static final int NOF_THREADS = 10;
+    private static final int NOF_THREADS = 1000;
     private static Monitor monitor = new Monitor();
 
     static class Monitor {
         private int menInBathroom = 0;
         private int womenInBathroom = 0;
-        private int waitingMen = 0;
-        private int waitingWomen = 0;
+        private Queue<Thread> queue = new LinkedList<>();
 
         public synchronized void manEnter(int id) throws InterruptedException {
-            waitingMen++;
-            while (womenInBathroom > 0) {
+            queue.add(Thread.currentThread());
+            while (queue.peek() != Thread.currentThread() || womenInBathroom > 0) {
                 wait();
             }
-            waitingMen--;
+            queue.poll();
             menInBathroom++;
             System.out.println("Man " + id + " entered the bathroom. Men in bathroom: " + menInBathroom);
         }
@@ -27,11 +29,11 @@ public class App {
         }
 
         public synchronized void womanEnter(int id) throws InterruptedException {
-            waitingWomen++;
-            while (menInBathroom > 0) {
+            queue.add(Thread.currentThread());
+            while (queue.peek() != Thread.currentThread() || menInBathroom > 0) {
                 wait();
             }
-            waitingWomen--;
+            queue.poll();
             womenInBathroom++;
             System.out.println("Woman " + id + " entered the bathroom. Women in bathroom: " + womenInBathroom);
         }
