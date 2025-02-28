@@ -60,7 +60,6 @@ int main(int argc, char *argv[])
 
 void man(int rank)
 {
-    // Man's logic for proposing
     // Iterate through the man's preferences and propose to each woman in order
     for (int i = 0; i < N; i++)
     {
@@ -69,12 +68,13 @@ void man(int rank)
         MPI_Send(&rank, 1, MPI_INT, womanRank + N, 0, MPI_COMM_WORLD);
         printf("Man %d is proposing to Woman %d.\n", rank, womanRank);
     }
-    // Keep track of which women have been proposed to using the proposals array
+    // TODO Keep track of which women have been proposed to using the proposals array
+
+    
 }
 
 void woman(int rank)
 {
-    // Woman's logic for accepting/rejecting proposals
     printf("Woman %d is listening.\n", rank);
     int currentPartner = -1; // No partner initially
     int proposal;
